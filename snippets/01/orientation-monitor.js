@@ -35,9 +35,13 @@ $(document).ready(function() {
                 rotationText = ROTATION_CLASSES[window.orientation.toString()];
             } // if
             
-            // display the details we have determine from the display
-            $("#orientation").html(orientation);
-            $("#rotation-class").html(rotationText);
+            $(window).trigger("reorient", [orientation, rotationText]);
         }, 500);
+    });
+    
+    $(window).bind("reorient", function(evt, orientation, rotation) {
+        // display the details we have determine from the display
+        $("#orientation").html(orientation);
+        $("#rotation-class").html(rotation);
     });
 });
