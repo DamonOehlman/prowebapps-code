@@ -1,0 +1,7 @@
+task build << {
+    println "Building..."
+    ant.concat(destfile: "js/prowebapps.js") {
+        filelist dir: "src/js/",
+        files: ("load-snippet.js")
+    }
+}

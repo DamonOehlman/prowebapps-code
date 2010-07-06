@@ -1,0 +1,36 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+		<title>Pro Android Web Apps Welcome Page</title>
+		<link rel="stylesheet" href="css/main.css" />
+		<script type="text/javascript" charset="utf-8" src="js/jquery-1.4.2.min.js"></script>
+		<script type="text/javascript" charset="utf-8">
+		$(document).ready(function() {
+			$("#platform li").each(function() {
+				$(this).html(navigator[this.id]);
+			});
+		});
+		</script>
+	</head>
+	<body>
+		<h1>Pro Android Web Apps</h1>
+		<div id="main">
+			<ul class="group">
+				<li><h3>Sample Applications</h3></li>
+				<li><a href="/to-do-list/">To Do List Application</a></li>
+			</ul>
+			
+			<ul class="group">
+				<li><h3>Code Snippets</h3></li>
+				<li><a href="#snippets">Snippets by Chapter</a></li>
+			</ul>
+
+			<h3>Platform Details</h3>
+			<ul id="platform">
+				<li id="userAgent"></li>
+			</ul>
+		</div>
+	</body>
+</html>

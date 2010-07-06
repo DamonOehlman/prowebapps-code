@@ -1,0 +1,29 @@
+<html>
+<head>
+	<title>Simple Mobile Web Page</title>
+	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+	<link rel="stylesheet" media="screen" href="todolist.css" />
+	<script type="text/javascript">
+	function updateOrientation(evt) {
+		window.orientation = 0;
+		// return false;
+		//document.getElementById("taskname").value = window.orientation;
+		//document.getElementById("taskdue").value = new Date().getTime();
+	} 
+	</script>
+</head>
+<body onload="window.scrollTo(0, 1);" onorientationchange="updateOrientation();">
+	<h1 class="fancy">Create Task</h1>
+	<form id="taskentry" onsubmit="return false;">
+	<ul>
+		<li><input type="text" name="task[name]" id="taskname" placeholder="Task Name"/></li>
+		<li>
+			<textarea name="task[description]" id="taskdesc" placeholder="Description" rows="5">
+			</textarea>
+		</li>
+		<li><input type="text" name="task[due]" id="taskdue" placeholder="Task Due" /></li>
+		<li class="naked"><input type="submit" name="Save" /></li>
+	</ul>
+	</form>
+</body>
+</html>

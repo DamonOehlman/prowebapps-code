@@ -1,0 +1,38 @@
+body {
+    margin: 0px;
+}
+
+h1.simple {
+    font-size: 0.9em;
+    padding: 8px 4px 4px 8px;
+    background: #333333;
+    color: #AAAAAA;
+    border-bottom: 2px solid #AAAAAA;
+    margin: 0;
+}
+
+ul {
+    margin: 0;
+    padding: 4px;
+    list-style-type: none;
+}
+
+ul li {
+    margin: 0;
+    padding: 6px;
+}
+
+ul li.header {
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0.0, #666666), color-stop(1.0, #000000));
+    color: white;
+    font-style: bold;
+    padding: 6px;
+    -webkit-border-radius: 3px;
+    margin-top: 4px;
+}
+
+ul li label {
+    width: 120px;
+    float: left;
+    clear: left;
+}
