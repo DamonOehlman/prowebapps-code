@@ -1,0 +1,40 @@
+<html>
+<head>
+    <title>To Do List | Pro Web Apps</title>
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+	<link rel="stylesheet" media="screen" href="../../css/proui.css" />
+    <link rel="stylesheet" media="screen" href="todolist.css" />
+    <script type="text/javascript" src="../../js/jquery-1.4.2.min.js"></script>
+	<script type="text/javascript" src="../../js/jquery.validate.js"></script>
+	<script type="text/javascript" src="../../js/date.js"></script>
+    <script type="text/javascript" src="../../js/prowebapps.js"></script>
+	<script type="text/javascript" src="todolist.js"></script>
+</head>
+<body>
+	<ul id="menu">
+	</ul>
+	<div id="main" class="view">
+		<h1>To Do List</h1>
+		<div class="task">
+			<h3>MIT: <span class="mit-name">Mow the Lawn</span></h3>
+			<p class-"mit-description">Task description goes here</p>
+			<p class="task-due">
+				<label>DUE IN:</label>
+				<span class="mit-daysleft">5 days</span>
+			</p>
+			<ul class="task-actions">
+				<li class="right"><a href="#">COMPLETE TASK</a></li>
+				<li><a href="#">START WORKING</a></li>
+			</ul>
+		</div>
+		<ul class="buttons">
+			<li><a class="changeview" href="#alltasks">Show All Tasks</a></li>
+			<li><a class="changeview" href="#add">Add New</a></li>
+		</ul>
+	</div>
+	<div id="add" class="view">
+    	<h1>Create Task</h1>
+		<p>Add Form Goes Here</p>
+	</div>
+</body>
+</html>

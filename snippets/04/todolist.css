@@ -57,3 +57,57 @@ input[type=submit] {
     width: 100%;
     padding: 6px;
 }
+
+/* task styling */
+
+div.task {
+    margin: 8px 4px;
+}
+
+div.task h3 {
+    border: 1px solid #ff6600;
+    background: #ff7f2a;
+    color: white;
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    margin: 0;
+    padding: 8px;
+    font-size: 0.8em;
+}
+
+div.task p {
+    margin: 0;
+    background: #e6e6e6;
+    border-left: 1px solid #b3b3b3;
+    border-right: 1px solid #b3b3b3;
+    padding: 8px;
+}
+
+p.task-due label {
+    font-weight: bold;
+    width: 70px;
+    float: left;
+}
+
+ul.task-actions {
+    background: #b3b3b3;
+    border: 1px solid #b3b3b3;
+    color: white;
+    padding: 8px;
+    -webkit-border-bottom-left-radius: 5px;
+    -webkit-border-bottom-right-radius: 5px;
+    margin: 0;
+    list-style-type: none;
+}
+
+ul.task-actions li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.8em;
+}
+
+ul.task-actions li.right {
+    float: right;
+    padding: 4px 0 0 0;
+}

@@ -1,0 +1,85 @@
+body {
+    margin: 0px;
+    min-height: 480px;
+    font-family: Arial;
+}
+
+h1.simple {
+    font-size: 0.9em;
+    padding: 8px 4px 4px 8px;
+    background: #333333;
+    color: #AAAAAA;
+    border-bottom: 2px solid #AAAAAA;
+    margin: 0 0 4px 0;
+}
+
+h1.fancy {
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0.0, #666666), color-stop(0.5, #3A3A3A), color-stop(0.5, #222222), color-stop(1.0, #000000));
+    -webkit-box-shadow: 0 2px 1px #AAAAAA;
+    -webkit-border-bottom-left-radius: 6px;
+    -webkit-border-bottom-right-radius: 6px;
+    font-size: 1.1em;
+    color: white;
+    padding: 10px 8px;
+    margin: 0 6px 6px 6px;
+    text-align: center;
+}
+
+ul {
+    margin: 0;
+    padding: 4px;
+    list-style-type: none;
+}
+
+ul li {
+    margin: 0;
+    padding: 2px 6px;
+}
+
+ul li.header {
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0.0, #666666), color-stop(1.0, #000000));
+    color: white;
+    font-style: bold;
+    padding: 6px;
+    -webkit-border-radius: 3px;
+    margin-top: 2px;
+}
+
+ul li label {
+    width: 120px;
+    float: left;
+    clear: left;
+}
+
+ul#actions li {
+    padding: 0px;
+}
+
+button {
+    width: 100%;
+    padding: 8px 0 10px 0;
+}
+
+/* form element styles */
+
+ul {
+    margin: 0px;
+    padding: 6px;
+    list-style-type: none;
+}
+
+ul li {
+    margin: 0 0 4px 0;
+}
+
+ul li.bordered {
+    -webkit-border-radius: 4px;
+    border: 1px solid #666666;
+    padding: 4px;
+}
+
+input, textarea {
+    -webkit-appearance: none;
+    border: 0;
+    width: 99%;
+}
