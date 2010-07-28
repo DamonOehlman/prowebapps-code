@@ -134,34 +134,93 @@ PROWEBAPPS = (function() {
         },
         
         ViewManager: (function() {
-            var views = {};
-            var activeView = null;
+            var views = {},
+                activeView = null,
+                viewStack = [],
+                backAction = null;
+                
+            function getViewActions(view) {
+                var html = "";
+                for (var ii = 0; view && (ii < view.actions.length); ii++) {
+                    html += "<li>" + view.actions[ii].getAnchor() + "</li>";
+                } // for
+                
+                // if the view stack is active, then add a back action
+                if (viewStack.length > 0) {
+                    html += "<li>" + backAction.getAnchor() + "</li>";
+                } // if
+
+                return html;
+            } // getViewActions
+            
+            function getAction(view, actionId) {
+                // extrac the id portion from the action id
+                actionId = actionId.replace(/^action_(\d+)$/i, "$1");
+                
+                if (backAction && (backAction.id == actionId)) {
+                    return backAction;
+                } // if
+                
+                // find the specified view in the active view and execute it
+                for (var ii = 0; ii < view.actions.length; ii++) {
+                    if (view.actions[ii].id == actionId) {
+                        return view.actions[ii];
+                    } // if
+                } // for
+                
+                return null;
+            } // getAction
+            
+            function updateViewStack(oldView, newView) {
+                var shouldPush = false;
+                    
+                // first let's determine if we should push onto the stack
+                shouldPush = oldView && (
+                    (viewStack.length === 0) ||
+                    (newView && (viewStack[viewStack.length - 1].id != newView.id))
+                );
+                 
+                // if we should push onto the stack, then do so, otherwise pop
+                if (shouldPush) {
+                    viewStack.push(oldView);
+                    
+                    // if the back action does not exist yet, then create it
+                    if (! backAction) {
+                        backAction = new module.ViewAction({
+                            label: "Back",
+                            run: function() {
+                                subModule.activate(viewStack[viewStack.length - 1].id);
+                            }
+                        });
+                    } // if
+                }
+                else if (oldView && newView && (viewStack.length > 0)) {
+                    viewStack.pop();
+                } // if..else
+            } // updateViewStack
             
             function switchView(oldView, newView) {
                 var ii, menu = jQuery("#menu").get(0);
                 
-                // switch the views
+                // if the old view is assigned, then push it onto the stack
+                updateViewStack(oldView, newView);
+                
+                // switch the views using jQuery
                 oldView ? jQuery("#" + oldView.id).hide() : null;
-                newView ? jQuery("#" + newView.id).show() : null;
+                newView ? jQuery("#" + newView.id).show().trigger("activated") : null;
                 
                 // if we have a menu, then update the actions
                 if (menu) {
                     // clear the menu and create list items and anchors as required 
-                    jQuery(menu).html('');
-                    for (ii = 0; activeView && (ii < activeView.actions.length); ii++) {
-                        jQuery(menu).append("<li>" + activeView.actions[ii].getAnchor() + "</li>");
-                    } // for
+                    jQuery(menu).html(getViewActions(activeView));
                     
                     // attach a click handler to each of the anchors now in the menu
                     jQuery(menu).find("a").click(function(evt) {
-                        // find the specified view in the active view and execute it
-                        for (ii = 0; ii < activeView.actions.length; ii++) {
-                            if (("action_" + activeView.actions[ii].id) == this.id) {
-                                activeView.actions[ii].execute();
-                                evt.preventDefault();
-                                break;
-                            } // if
-                        } // for
+                        var action = getAction(activeView, this.id);
+                        if (action) {
+                            action.execute();
+                            evt.preventDefault();
+                        } // if
                     });
                 } // if
             } // switchView
@@ -185,6 +244,12 @@ PROWEBAPPS = (function() {
                     switchView(oldView, activeView);
                 },
                 
+                back: function() {
+                    if (backAction) {
+                        backAction.execute();
+                    } // if
+                },
+                
                 getActiveView: function() {
                     return activeView ? jQuery("#" + activeView.id) : null;
                 },
@@ -202,11 +267,9 @@ PROWEBAPPS = (function() {
                 }
             };
             
-            $(document).ready(function() {
-                subModule.activate("main");
-                
-                $("a.changeview").each(function() {
-                    $(this).click(function(evt) {
+            jQuery(document).ready(function() {
+                jQuery("a.changeview").each(function() {
+                    jQuery(this).click(function(evt) {
                         subModule.activate(this.href.replace(/^.*\#(.*)$/, "$1"));
                         evt.preventDefault();
                     }); // click

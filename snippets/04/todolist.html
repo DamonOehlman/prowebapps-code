@@ -6,7 +6,6 @@
     <link rel="stylesheet" media="screen" href="todolist.css" />
     <script type="text/javascript" src="../../js/jquery-1.4.2.min.js"></script>
 	<script type="text/javascript" src="../../js/jquery.validate.js"></script>
-	<script type="text/javascript" src="../../js/date.js"></script>
     <script type="text/javascript" src="../../js/prowebapps.js"></script>
 	<script type="text/javascript" src="todolist.js"></script>
 </head>
@@ -15,16 +14,16 @@
 	</ul>
 	<div id="main" class="view">
 		<h1>To Do List</h1>
-		<div class="task">
-			<h3>MIT: <span class="mit-name">Mow the Lawn</span></h3>
-			<p class-"mit-description">Task description goes here</p>
+		<div class="task" style="display: none;">
+			<h3>MIT: <span class="task-name">Mow the Lawn</span></h3>
+			<p class="task-description">Task description goes here</p>
 			<p class="task-due">
 				<label>DUE IN:</label>
-				<span class="mit-daysleft">5 days</span>
+				<span class="task-daysleft">5 days</span>
 			</p>
 			<ul class="task-actions">
-				<li class="right"><a href="#">COMPLETE TASK</a></li>
-				<li><a href="#">START WORKING</a></li>
+				<li class="right"><a href="#" class="task-complete">COMPLETE TASK</a></li>
+				<li><a href="#" class="task-start">START WORKING</a></li>
 			</ul>
 		</div>
 		<ul class="buttons">
@@ -32,9 +31,24 @@
 			<li><a class="changeview" href="#add">Add New</a></li>
 		</ul>
 	</div>
+	<div id="alltasks" class="view">
+		<h1 class="fancy">All Tasks</h1>
+		<ul id="tasklist">
+		</ul>
+	</div>
 	<div id="add" class="view">
-    	<h1>Create Task</h1>
-		<p>Add Form Goes Here</p>
+	    <h1 class="fancy">Create Task</h1>
+		<div id="errors"></div>
+	    <form id="taskentry">
+	    <ul>
+	        <li><input type="text" class="required" name="task[name]" id="taskname" placeholder="Task Name" value="Mow the Lawn "/></li>
+	        <li>
+	            <textarea name="task[description]" id="taskdesc" placeholder="Description" rows="5"></textarea>
+	        </li>
+	        <li><input type="text" class="required date" name="task[due]" id="taskdue" placeholder="Task Due" value="2010-08-23 11:23" /></li>
+	        <li class="naked"><input type="submit" name="Save" /></li>
+	    </ul>
+	    </form>
 	</div>
 </body>
 </html>

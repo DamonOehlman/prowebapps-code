@@ -1,13 +1,83 @@
 TODOLIST = (function() {
     var MILLISECONDS_TO_DAYS = 86400000;
     
+    function showTaskDetails(selector, task) {
+        var container = jQuery(selector),
+            daysDue = task.getDaysDue();
+        
+        // update the relevant task details
+        container.find(".task-name").html(task.name);
+        container.find(".task-description").html(task.description);
+        
+        if (daysDue < 0) {
+            container.find(".task-daysleft").html("OVERDUE BY " + Math.abs(daysDue) + " DAYS").addClass("overdue");
+        }
+        else {
+            container.find(".task-daysleft").html(daysDue + " days").removeClass("overdue");
+        } // if..else
+        
+        container.slideDown();
+    } // showTaskDetails
+    
+    function populateTaskList() {
+        function pad(n) {
+            return n<10 ? '0'+n : n;
+        }
+        
+        var listHtml = "",
+            monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+        
+        // iterate through the current tasks
+        for (var ii = 0; ii < currentTasks.length; ii++) {
+            var dueDateHtml = 
+                "<ul class='calendar right'>" + 
+                    "<li class='day'>" + pad(currentTasks[ii].due.getDate()) + "</li>" +
+                    "<li class='month'>" + monthNames[currentTasks[ii].due.getMonth()] + "</li>" + 
+                    "<li class='year'>" + currentTasks[ii].due.getFullYear() + "</li>" + 
+                "</ul>";
+            
+            // add the list item for the task
+            listHtml += "<li id='task_" + currentTasks[ii].id + "'>" + dueDateHtml +
+                "<div class='task-header'>" + currentTasks[ii].name + "</div>" + 
+                "<div class='task-details'>" + 
+                    currentTasks[ii].description + "<br />" +
+                    "<a href='#' class='task-complete right'>COMPLETE TASK</a>&nbsp;" + 
+                "</div>" +
+                "</li>";
+        } // for
+        
+        jQuery("ul#tasklist").html(listHtml);
+    } // populateTaskList
+    
+    function toggleDetailsDisplay(listItem) {
+        // slide up any active task details panes
+        jQuery(".task-details").slideUp();
+
+        // if the current item is selected implement a toggle
+        if (activeItem == listItem) { 
+            activeItem = null;
+            return; 
+        }
+        
+        // in the current list item toggle the display of the details pane
+        jQuery(listItem).find(".task-details").slideDown();
+        
+        // update the active item
+        activeItem = listItem;
+    } // toggleDetailsDisplay
+    
+    // define an array that will hold the current tasks
+    var currentTasks = [],
+        activeItem = null;
+    
     // define the module
     var module = {
 
-        /* todo item */
+        /* todo task */
         
-        ToDoItem: function(params) {
+        Task: function(params) {
             params = jQuery.extend({
+                id: null,
                 name: "",
                 description: "",
                 due: null
@@ -15,10 +85,15 @@ TODOLIST = (function() {
             
             // initialise self
             var self = {
-                id: null,
+                id: params.id,
                 name: params.name,
                 description: params.description,
                 due: params.due ? new Date(params.due) : null,
+                completed: null,
+                
+                complete: function() {
+                    self.completed = new Date();
+                },
                 
                 getDaysDue: function() {
                     return Math.floor((self.due - new Date()) / MILLISECONDS_TO_DAYS);
@@ -40,7 +115,7 @@ TODOLIST = (function() {
                 // check that we have the required tables created
                 db.transaction(function(transaction) {
                     transaction.executeSql(
-                        "CREATE TABLE IF NOT EXISTS item(" + 
+                        "CREATE TABLE IF NOT EXISTS task(" + 
                         "  name TEXT NOT NULL, " + 
                         "  description TEXT, " + 
                         "  due DATETIME, " + 
@@ -53,75 +128,92 @@ TODOLIST = (function() {
                 // check that we have the required tables created
                 db.transaction(function(transaction) {
                     transaction.executeSql(
-                        "CREATE TABLE IF NOT EXISTS item(" + 
+                        "CREATE TABLE IF NOT EXISTS task(" + 
                         "  name TEXT NOT NULL, " + 
                         "  description TEXT, " + 
                         "  due DATETIME);");
                 });
                 
                 db.changeVersion("1.0", "1.1", function(transaction) {
-                    transaction.executeSql("ALTER TABLE item ADD completed DATETIME;");
+                    transaction.executeSql("ALTER TABLE task ADD completed DATETIME;");
                 });
             }
             
-            function getSortedItems(compareFn, callback) {
-                subModule.getItems(function(items) {
-                    callback(items.sort(compareFn));
+            function getTasks(callback, extraClauses) {
+                db.transaction(function(transaction) {
+                    transaction.executeSql(
+                        "SELECT rowid as id, * FROM task " + (extraClauses ? extraClauses : ""),
+                        [],
+                        function (transaction, results) {
+                            // initialise an array to hold the tasks
+                            var tasks = [];
+                            
+                            // read each of the rows from the db, and create tasks
+                            for (var ii = 0; ii < results.rows.length; ii++) {
+                                tasks.push(new module.Task(results.rows.item(ii)));
+                            } // for
+                            
+                            callback(tasks);
+                        }
+                    );
                 });
-            } // getSortedItem
+            } // getTasks
             
             var subModule = {
-                getItems: function(callback) {
-                    db.transaction(function(transaction) {
-                        transaction.executeSql(
-                            "SELECT * FROM item",
-                            [],
-                            function (transaction, results) {
-                                // initialise an array to hold the items
-                                var items = [];
-                                
-                                // read each of the rows from the db, and create items
-                                for (var ii = 0; ii < results.rows.length; ii++) {
-                                    items.push(new module.ToDoItem(results.rows.item(ii)));
-                                } // for
-                                
-                                callback(items);
-                            }
-                        );
-                    });
+                getIncompleteTasks: function(callback) {
+                    getTasks(callback, "WHERE completed IS NULL");
                 },
                 
-                getItemsInPriorityOrder: function(callback) {
-                    getSortedItems(function(itemA, itemB) {
-                        return itemA.due - itemB.due;
-                    }, callback);
+                getTasksInPriorityOrder: function(callback) {
+                    subModule.getIncompleteTasks(function(tasks) {
+                        callback(tasks.sort(function(taskA, taskB) {
+                            return taskA.due - taskB.due;
+                        }));
+                    });
                 },
                 
                 getMIT: function(callback) {
-                    subModule.getItemsInPriorityOrder(function(items) {
-                        callback(items.length > 0 ? items[0] : null);
+                    subModule.getTasksInPriorityOrder(function(tasks) {
+                        callback(tasks.length > 0 ? tasks[0] : null);
                     });
                 },
                 
-                saveItem: function(item, callback) {
+                saveTask: function(task, callback) {
                     db.transaction(function(transaction) {
-                        transaction.executeSql(
-                            "INSERT INTO item(name, description, due) VALUES (?, ?, ?);", 
-                            [item.name, item.description, item.due]
-                        );
+                        // if the task id is not assigned, then insert
+                        if (! task.id) {
+                            transaction.executeSql(
+                                "INSERT INTO task(name, description, due) VALUES (?, ?, ?);", 
+                                [task.name, task.description, task.due],
+                                function(tx) {
+                                    transaction.executeSql(
+                                        "SELECT MAX(rowid) AS id from task",
+                                        [],
+                                        function (tx, results) {
+                                            task.id = results.rows.item(0).id;
+                                            if (callback) {
+                                                callback();
+                                            } // if
+                                        } 
+                                    );
+                                }
+                            );
+                        }
+                        // otherwise, update
+                        else {
+                            transaction.executeSql(
+                                "UPDATE task " +
+                                "SET name = ?, description = ?, due = ?, completed = ? " + 
+                                "WHERE rowid = ?;",
+                                [task.name, task.description, task.due, task.completed, task.id],
+                                function (tx) {
+                                    if (callback) {
+                                        callback();
+                                    } // if
+                                }
+                            );
+                        } // if..else
                     });
-               }
-            };
-            
-            return subModule;
-        })(),
-        
-        UI: (function() {
-            var subModule = {
-                displayMIT: function(selector, mit) {
-                    var match = jQuery(selector);
-                    
-                    
                 }
             };
             
@@ -175,7 +267,55 @@ TODOLIST = (function() {
                     } // if
                 } // displayFieldErrors
             };
-        })()
+        })(),
+        
+        /* view activation handlers */
+        
+        activateMain: function() {
+            TODOLIST.Storage.getMIT(function(mit) {
+                if (mit) {
+                    // the no tasks message may be displayed, so remove it
+                    jQuery("#main .notasks").remove();
+
+                    // update the task details
+                    showTaskDetails("#main .task", mit);
+                    
+                    // attach a click handler to the complete task button
+                    jQuery("#main .task-complete").unbind().click(function() {
+                        jQuery("#main .task").slideUp();
+                        
+                        // mark the task as complete
+                        mit.complete();
+                        
+                        // save the task back to storage
+                        TODOLIST.Storage.saveTask(mit, module.activateMain);
+                    });
+                }
+                else {
+                    jQuery("#main .notasks").remove();
+                    jQuery("#main .task").slideUp().after("<p class='notasks'>You have no tasks to complete</p>");
+                }
+            });
+        },
+        
+        activateAllTasks: function() {
+            TODOLIST.Storage.getTasksInPriorityOrder(function(tasks) {
+                // update the current tasks
+                currentTasks = tasks;
+
+                populateTaskList();
+                
+                // update the task list
+                jQuery("ul#tasklist li").click(function() {
+                    toggleDetailsDisplay(this);
+                });
+                
+                jQuery("ul#tasklist a.task-complete").click(function() {
+                    // complete the task
+                    alert("complete the task");
+                });
+            });
+        }
     };
     
     // define the all tasks view
@@ -193,28 +333,27 @@ TODOLIST = (function() {
 })();
 
 $(document).ready(function() {
+    /* validation code */
+
     $(":input").focus(function(evt) {
         TODOLIST.Validation.displayFieldErrors(this);
     }).blur(function(evt) {
         $("#errordetail_" + this.id).remove();
     });
-    
-    $("#main .task").
-    
-    TODOLIST.Storage.getMIT(function(mit) {
-        alert("task due on: " + mit.due + " which is " + mit.getDaysDue() + " days away");
-    });
-    
+
     $("#taskentry").validate({
         submitHandler: function(form) {
             // get the values from the form in hashmap
             var formValues = PROWEBAPPS.getFormValues(form);
             
-            // create a new item to save to the database
-            var item = new TODOLIST.ToDoItem(formValues);
+            // create a new task to save to the database
+            var task = new TODOLIST.Task(formValues);
             
-            // now create a new todo list item
-            TODOLIST.Storage.saveItem(item);
+            // now create a new task
+            TODOLIST.Storage.saveTask(task, function() {
+                // PROWEBAPPS.ViewManager.activate("main");
+                PROWEBAPPS.ViewManager.back();
+            });
         },
         showErrors: function(errorMap, errorList) {
             // initialise an empty errors map
@@ -234,4 +373,11 @@ $(document).ready(function() {
             TODOLIST.Validation.displayErrors(errors);
         }
     });
+    
+    // bind activation handlers
+    $("#main").bind("activated", TODOLIST.activateMain);
+    $("#alltasks").bind("activated", TODOLIST.activateAllTasks);
+
+    // initialise the main view
+    PROWEBAPPS.ViewManager.activate("main");
 });

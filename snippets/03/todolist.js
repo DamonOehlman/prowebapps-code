@@ -2,9 +2,9 @@ TODOLIST = (function() {
     // define the module
     var module = {
 
-        /* todo item */
+        /* todo task */
         
-        ToDoItem: function(params) {
+        Task: function(params) {
             params = jQuery.extend({
                 name: "",
                 description: "",
@@ -34,7 +34,7 @@ TODOLIST = (function() {
                 // check that we have the required tables created
                 db.transaction(function(transaction) {
                     transaction.executeSql(
-                        "CREATE TABLE IF NOT EXISTS item(" + 
+                        "CREATE TABLE IF NOT EXISTS task(" + 
                         "  name TEXT NOT NULL, " + 
                         "  description TEXT, " + 
                         "  due DATETIME, " + 
@@ -47,23 +47,23 @@ TODOLIST = (function() {
                 // check that we have the required tables created
                 db.transaction(function(transaction) {
                     transaction.executeSql(
-                        "CREATE TABLE IF NOT EXISTS item(" + 
+                        "CREATE TABLE IF NOT EXISTS task(" + 
                         "  name TEXT NOT NULL, " + 
                         "  description TEXT, " + 
                         "  due DATETIME);");
                 });
                 
                 db.changeVersion("1.0", "1.1", function(transaction) {
-                    transaction.executeSql("ALTER TABLE item ADD completed DATETIME;");
+                    transaction.executeSql("ALTER TABLE task ADD completed DATETIME;");
                 });
             }
             
             return {
-                saveItem: function(item, callback) {
+                saveTask: function(task, callback) {
                     db.transaction(function(transaction) {
                         transaction.executeSql(
-                            "INSERT INTO item(name, description, due) VALUES (?, ?, ?);", 
-                            [item.name, item.description, item.due]
+                            "INSERT INTO task(name, description, due) VALUES (?, ?, ?);", 
+                            [task.name, task.description, task.due]
                         );
                     });
                }
@@ -146,11 +146,11 @@ $(document).ready(function() {
             // get the values from the form in hashmap
             var formValues = PROWEBAPPS.getFormValues(form);
             
-            // create a new item to save to the database
-            var item = new TODOLIST.ToDoItem(formValues);
+            // create a new task to save to the database
+            var task = new TODOLIST.Task(formValues);
             
-            // now create a new todo list item
-            TODOLIST.Storage.saveItem(item);
+            // now create a new todo list task
+            TODOLIST.Storage.saveTask(task);
         },
         showErrors: function(errorMap, errorList) {
             // initialise an empty errors map
