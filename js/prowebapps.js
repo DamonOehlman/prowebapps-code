@@ -53,6 +53,44 @@ PROWEBAPPS = (function() {
             return values;
         },
         
+        Easing: (function() {
+            var s = 1.70158;
+            
+            return {
+                Linear: function(t, b, c, d) {
+                    return c*t/d + b;
+                },
+                
+                Sine: {
+                    In: function(t, b, c, d) {
+                        return -c * Math.cos(t/d * (Math.PI/2)) + c + b;
+                    },
+                    
+                    Out: function(t, b, c, d) {
+                        return c * Math.sin(t/d * (Math.PI/2)) + b;
+                    },
+                    
+                    InOut: function(t, b, c, d) {
+                        return -c/2 * (Math.cos(Math.PI*t/d) - 1) + b;
+                    }
+                },
+                
+                Back: {
+                    In: function(t, b, c, d) {
+                        return c*(t/=d)*t*((s+1)*t - s) + b;
+                    },
+                    
+                    Out: function(t, b, c, d) {
+                        return c*((t=t/d-1)*t*((s+1)*t + s) + 1) + b;
+                    },
+                    
+                    InOut: function(t, b, c, d) {
+                        return ((t/=d/2)<1) ? c/2*(t*t*(((s*=(1.525))+1)*t-s))+b : c/2*((t-=2)*t*(((s*=(1.525))+1)*t+s)+2)+b;
+                    }
+                }
+            };
+        })(),
+        
         Storage: (function() {
             window.addEventListener("storage", function(evt) {
                 alert(evt);

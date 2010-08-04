@@ -1,3 +1,8 @@
+body {
+    margin: 0px;
+    font-family: Arial;
+}
+
 div.view {
     display: none;
     padding: 0 6px;
