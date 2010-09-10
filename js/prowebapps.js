@@ -210,10 +210,8 @@ PROWEBAPPS = (function() {
             } // getAction
             
             function updateViewStack(oldView, newView) {
-                var shouldPush = false;
-                    
                 // first let's determine if we should push onto the stack
-                shouldPush = oldView && (
+                var shouldPush = oldView && (
                     (viewStack.length === 0) ||
                     (newView && (viewStack[viewStack.length - 1].id != newView.id))
                 );

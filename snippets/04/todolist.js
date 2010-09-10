@@ -178,7 +178,43 @@ TODOLIST = (function() {
                     });
                 },
                 
-getMostImportantTask
+                saveTask: function(task, callback) {
+                    db.transaction(function(transaction) {
+                        // if the task id is not assigned, then insert
+                        if (! task.id) {
+                            transaction.executeSql(
+                                "INSERT INTO task(name, description, due) VALUES (?, ?, ?);", 
+                                [task.name, task.description, task.due],
+                                function(tx) {
+                                    transaction.executeSql(
+                                        "SELECT MAX(rowid) AS id from task",
+                                        [],
+                                        function (tx, results) {
+                                            task.id = results.rows.item(0).id;
+                                            if (callback) {
+                                                callback();
+                                            } // if
+                                        } 
+                                    );
+                                }
+                            );
+                        }
+                        // otherwise, update
+                        else {
+                            transaction.executeSql(
+                                "UPDATE task " +
+                                "SET name = ?, description = ?, due = ?, completed = ? " + 
+                                "WHERE rowid = ?;",
+                                [task.name, task.description, task.due, task.completed, task.id],
+                                function (tx) {
+                                    if (callback) {
+                                        callback();
+                                    } // if
+                                }
+                            );
+                        } // if..else
+                    });
+                }
             };
             
             return subModule;
@@ -236,23 +272,23 @@ getMostImportantTask
         /* view activation handlers */
         
         activateMain: function() {
-            TODOLIST.Storage.getMostImportantTask(function(mit) {
-                if (mit) {
+            TODOLIST.Storage.getMostImportantTask(function(task) {
+                if (task) {
                     // the no tasks message may be displayed, so remove it
                     jQuery("#main .notasks").remove();
 
                     // update the task details
-                    showTaskDetails("#main .task", mit);
+                    showTaskDetails("#main .task", task);
                     
                     // attach a click handler to the complete task button
                     jQuery("#main .task-complete").unbind().click(function() {
                         jQuery("#main .task").slideUp();
                         
                         // mark the task as complete
-                        mit.complete();
+                        task.complete();
                         
                         // save the task back to storage
-                        TODOLIST.Storage.saveTask(mit, module.activateMain);
+                        TODOLIST.Storage.saveTask(task, module.activateMain);
                     });
                 }
                 else {
@@ -269,7 +305,7 @@ getMostImportantTask
 
                 populateTaskList();
                 
-                // update the task list
+                // refresh the task list display
                 jQuery("ul#tasklist li").click(function() {
                     toggleDetailsDisplay(this);
                 });
