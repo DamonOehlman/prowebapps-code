@@ -172,49 +172,13 @@ TODOLIST = (function() {
                     });
                 },
                 
-                getMIT: function(callback) {
+                getMostImportantTask: function(callback) {
                     subModule.getTasksInPriorityOrder(function(tasks) {
                         callback(tasks.length > 0 ? tasks[0] : null);
                     });
                 },
                 
-                saveTask: function(task, callback) {
-                    db.transaction(function(transaction) {
-                        // if the task id is not assigned, then insert
-                        if (! task.id) {
-                            transaction.executeSql(
-                                "INSERT INTO task(name, description, due) VALUES (?, ?, ?);", 
-                                [task.name, task.description, task.due],
-                                function(tx) {
-                                    transaction.executeSql(
-                                        "SELECT MAX(rowid) AS id from task",
-                                        [],
-                                        function (tx, results) {
-                                            task.id = results.rows.item(0).id;
-                                            if (callback) {
-                                                callback();
-                                            } // if
-                                        } 
-                                    );
-                                }
-                            );
-                        }
-                        // otherwise, update
-                        else {
-                            transaction.executeSql(
-                                "UPDATE task " +
-                                "SET name = ?, description = ?, due = ?, completed = ? " + 
-                                "WHERE rowid = ?;",
-                                [task.name, task.description, task.due, task.completed, task.id],
-                                function (tx) {
-                                    if (callback) {
-                                        callback();
-                                    } // if
-                                }
-                            );
-                        } // if..else
-                    });
-                }
+getMostImportantTask
             };
             
             return subModule;
@@ -272,7 +236,7 @@ TODOLIST = (function() {
         /* view activation handlers */
         
         activateMain: function() {
-            TODOLIST.Storage.getMIT(function(mit) {
+            TODOLIST.Storage.getMostImportantTask(function(mit) {
                 if (mit) {
                     // the no tasks message may be displayed, so remove it
                     jQuery("#main .notasks").remove();
