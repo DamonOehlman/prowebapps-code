@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Tile5 Map | Pro Web Apps</title>
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+    <link rel="stylesheet" media="screen" href="../../css/proui.css" />
+    <style type="text/css">
+      html { height: 100% }
+      body { height: 100%; margin: 0px; padding: 0px }
+    </style>    
+    <script type="text/javascript" src="../../js/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="../../js/prowebapps.js"></script>
+    <script type="text/javascript" src="http://www.tile5.org/jsapi/0.9.1/tile5.js"></script>
+    <script type="text/javascript" src="http://www.tile5.org/jsapi/0.9.1/tile5.osm.js"></script>
+    <script type="text/javascript" src="http://www.tile5.org/jsapi/0.9.1/tile5.cloudmade.js"></script>
+    <script type="text/javascript">
+    function initMap() {
+        // set the map size to be window height less the header
+        $("#map_canvas")
+            .attr('height', ($(window).height() - $("#main h1").outerHeight() - 20))
+            .attr('width', $(window).width() - 15);
+        
+        var map = new T5.Map({
+            container: 'map_canvas',
+            provider: new T5.Geo.Cloudmade.MapProvider({
+                apikey: "13077497529148b0a40f1bf71728d125"
+            })
+        });
+        
+        map.gotoPosition(new T5.Geo.Position(-34.397, 150.644), 8);
+    }
+    </script>
+</head>
+<body onload="initMap()">
+    <ul id="menu">
+    </ul>
+    <div id="main" class="view">
+        <h1>Tile5 Map Test</h1>
+        <canvas id="map_canvas"></canvas>
+    </div>
+</body>
+</html>
