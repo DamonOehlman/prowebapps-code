@@ -24,6 +24,23 @@ h1.fancy, div.view h1 {
     text-align: center;
 }
 
+/* include the simple header styles (CHAPTER 8) */
+
+h1.simple {
+    font-size: 0.9em;
+    padding: 8px 4px 4px 8px;
+    background: #333333;
+    color: #AAAAAA;
+    border-bottom: 2px solid #AAAAAA;
+    margin: 0 0 4px 0;
+}
+
+h1.floating {
+    position: absolute; 
+    width: 100%; 
+    z-index: 100;
+}
+
 /* menu styles (CHAPTER 4) */
 
 ul#menu {
