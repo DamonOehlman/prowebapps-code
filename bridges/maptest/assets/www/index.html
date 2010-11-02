@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<link rel="stylesheet" media="screen" href="mapapp.css" />
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="mapapp.js"></script>
+<script type="text/javascript" src="phonegap.js"></script>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false">
+</script>
+<script type="text/javascript">
+function initialize() {
+    var latlng = new google.maps.LatLng(-33.866, 151.209);
+    
+    MAPAPP.init(latlng, 13);
+    MAPAPP.addMarker(latlng, 'Sydney', 'Sydney Australia');
+    MAPAPP.addMarker(new google.maps.LatLng(-33.859, 151.209), 'The Rocks');
+    MAPAPP.addMarker(new google.maps.LatLng(-33.857, 151.215), 'Sydney Opera House');
+    MAPAPP.addMarker(new google.maps.LatLng(-33.861, 151.211), 'Circular Quay');
+
+    // update the map display
+    MAPAPP.updateDisplay();
+} // initialize
+</script>
+</head>
+<body onload="initialize()">
+<h1 class="simple floating">Mapping App Boilerplate</h1>
+<div id="map_canvas" style="width:100%; height:100%"></div>
+<div id="marker-nav">
+    <img src="img/navigation-arrow.png" class="left disabled" />
+    <span class='marker-title'>Test Text</span>
+    <img src="img/navigation-arrow.png" class="right" />
+</div>
+<div id="marker-detail" class="child-screen">
+    <div class='content'>Some Test Content</div>
+    <button class='close'>Close</button>
+</div>
+</body>
+</html>
