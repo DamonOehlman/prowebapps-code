@@ -1,0 +1,27 @@
+<html>
+<script src="../../js/jquery-1.4.2.min.js"></script>
+<script>
+function showCountryInfo(data) {
+    var countryData = data.geonames[0];
+    
+    $(document.body).html(
+        'Population of ' + countryData.countryName + ' = ' + 
+        countryData.population);
+} // showCountryInfo
+
+$(document).ready(function() {
+    // make the request to the geonames server
+    $.ajax({
+        url: 'http://ws.geonames.org/countryInfoJSON',
+        dataType: 'jsonp',
+        data: {
+            country: 'LY',
+            formatted: true
+        },
+        success: showCountryInfo
+    });
+});
+</script>
+<body>
+</body>
+</html>
