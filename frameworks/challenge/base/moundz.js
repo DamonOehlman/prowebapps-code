@@ -155,35 +155,44 @@ MOUNDZ = (function() {
         $('button.close').click(showScreen);
     } // initScreen
     
-    function run(zoomLevel) {
+    function run(zoomLevel, mockPosition) {
         // check that the watch hasn't already been setup
         // if it has, then exit as we don't want two watches...
         if (posWatchId !== 0) {
             return;
         } // if
         
-        // create the watch
-        posWatchId = navigator.geolocation.watchPosition(
-            function(position) {
-                var pos = new google.maps.LatLng(
-                    position.coords.latitude, 
-                    position.coords.longitude);
-            
-                if (map) {
-                    map.panTo(pos);
-                }
-                else {
-                    gotoPosition(pos, zoomLevel ? zoomLevel : 15);
-                } // if..else
-            
-                findResources(function() {
-                    module.updateDisplay();
+        // if mock position, then use that instead
+        if (mockPosition) {
+            gotoPosition(mockPosition, zoomLevel ? zoomLevel : 15);
+            findResources(function() {
+                module.updateDisplay();
+            });            
+        }
+        else {
+            // create the watch
+            posWatchId = navigator.geolocation.watchPosition(
+                function(position) {
+                    var pos = new google.maps.LatLng(
+                        position.coords.latitude, 
+                        position.coords.longitude);
+
+                    if (map) {
+                        map.panTo(pos);
+                    }
+                    else {
+                        gotoPosition(pos, zoomLevel ? zoomLevel : 15);
+                    } // if..else
+
+                    findResources(function() {
+                        module.updateDisplay();
+                    });
+                }, 
+                null,
+                {
+                    enableHighAccuracy: true
                 });
-            }, 
-            null,
-            {
-                enableHighAccuracy: true
-            });
+        } // if..else
     } // run
     
     function showScreen(screenId) {
@@ -268,12 +277,16 @@ MOUNDZ = (function() {
                 login: '#login'
             });
 
+            /*
             $(geominer).bind('authenticated', function(evt) {
                 $('#splash').hide();
                 $('#app').show();
                 
                 run(zoomLevel);
             });
+            */
+            
+            run(zoomLevel, new google.maps.LatLng(-33.86, 151.21));
 
             // initialise the screen
             initScreen();
