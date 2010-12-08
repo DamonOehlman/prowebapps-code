@@ -286,10 +286,11 @@ MOUNDZ = (function() {
             });
             */
             
-            run(zoomLevel, new google.maps.LatLng(-33.86, 151.21));
-
             // initialise the screen
             initScreen();
+
+            // run the app
+            run(zoomLevel, new google.maps.LatLng(-33.86, 151.21));
         },
         
         run: run,

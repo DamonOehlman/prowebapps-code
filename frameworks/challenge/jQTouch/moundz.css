@@ -74,23 +74,10 @@ h1.floating {
 /* marker navigation bar */
 #marker-nav {
     /* set general color and style */
-    background: rgba(33, 69, 123, 0.8);
     color: white;
     font-weight: bold;
-    text-shadow: 1px 1px 1px rgba(50, 50, 50, 0.85);
     text-align: center;
-
-    /* initialize positioning and layout */
-    position: absolute;
-    top: 20px;
-    z-index: 90;
-    width: 90%;
-    margin: 0 2%;
-    padding: 18px 3% 10px;
-
-    /* add the 'mandatory' border radius */
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    -webkit-border-radius: 12px;
+    padding: 10px;
 }
 
 /* marker navigation elements styling */

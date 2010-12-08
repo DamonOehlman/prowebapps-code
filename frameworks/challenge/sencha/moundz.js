@@ -7,8 +7,11 @@ MOUNDZ = (function() {
     var geominer = null,
         map = null,
         mainScreen = true,
+        mainPanel = null,
+        headerBar = null,
         markers = [],
         markerContent = {},
+        markerIndex = 0,
         posWatchId = 0;
         
     /* private functions */
@@ -21,28 +24,12 @@ MOUNDZ = (function() {
         
         // update the specified marker's icon to the active image
         marker.setIcon('img/pin-active.png');
-            
-        // update the navbar title using jQuery
-        $('#marker-nav .marker-title')
-            .html(marker.getTitle())
-            .removeClass('has-detail')
-            .unbind('click');
-            
-        // if content has been provided, then add the has-detail
-        // class to adjust the display to be "link-like" and 
-        // attach the click event handler
-        var content = markerContent[marker.getTitle()];
-        if (content) {
-            $('#marker-nav .marker-title')
-                .addClass('has-detail')
-                .click(function() {
-                    $('#marker-detail .content').html(content);
-                    showScreen('marker-detail');
-                });
-        } // if
         
+        Ext.getCmp('btnResource').setText(marker.getTitle());
+        Ext.getCmp('details_panel').update(markerContent[marker.getTitle()]);
+            
         // update the marker navigation controls
-        updateMarkerNav(getMarkerIndex(marker));
+        markerIndex = getMarkerIndex(marker);
     } // activateMarker
     
     function markResources(resourceType, deposits) {
@@ -141,18 +128,51 @@ MOUNDZ = (function() {
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
 
+        /*
         // initialise the map
         map = new google.maps.Map(
             document.getElementById("map_canvas"),
             myOptions);
+        */
+
+        // save a reference to the map control
+        map = Ext.getCmp('main_map').map;
+        
+        // set the options of the map
+        map.setOptions(myOptions);
     } // gotoPosition
     
     function initScreen() {
-        // watch for location hash changes
-        setInterval(watchHash, 10);
-
-        // next attach a click handler to all close buttons
-        $('button.close').click(showScreen);
+        mainPanel = new Ext.Panel({
+            id: 'mainPanel',
+            layout: 'card',
+            dockedItems: [
+                createHeader(),
+                createFooter()
+            ],
+            fullscreen: true,
+            ui: 'light',
+            defaults: {
+                scroll: false
+            },
+            items: [{
+                    xtype: 'map',
+                    id: 'main_map'
+                }, {
+                    xtype: 'sheet',
+                    id: 'details_panel',
+                    style: 'color: white'
+                }
+            ],
+            listeners: {
+                cardswitch: function(container, newCard, oldCard, index, animated) {
+                    var backButton = Ext.getCmp('goback');
+                    if (backButton) {
+                        backButton[index === 0 ? 'disable' : 'enable'].apply(backButton);
+                    } // if
+                }
+            }
+        });        
     } // initScreen
     
     function run(zoomLevel, mockPosition) {
@@ -263,7 +283,69 @@ MOUNDZ = (function() {
             showScreen();
         } // if
     } // watchHash
-
+    
+    /* sencha initialization methods */
+    
+    function createHeader() {
+        return new Ext.Toolbar({
+            dock: 'top',
+            ui: 'light',
+            defaults: {
+                iconMask: true
+            },
+            layout: {
+                pack: 'justify'
+            },
+            items : [{
+                xtype: 'button',
+                text: 'Back',
+                ui: 'back',
+                id: 'goback',
+                disabled: true,
+                handler: function(button, event) {
+                    Ext.getCmp('mainPanel').setCard(0);
+                }
+            }, {
+               xtype: 'spacer'
+            }, {
+               xtype: 'panel',
+               html: '<h1 style="color: white;">Moundz</h1>'
+            }, {
+               xtype: 'spacer' 
+            }]
+        });        
+    } // createHeader
+    
+    function createFooter() {
+        return new Ext.Toolbar({
+            dock: 'bottom',
+            ui: 'light',
+            layout: {
+                pack: 'justify'
+            },
+            items: [{
+                xtype: 'button',
+                text: 'Previous',
+                handler: function(button, evt) {
+                    activateMarker(markers[markerIndex - 1]);
+                }
+            }, {
+                xtype: 'button',
+                id: 'btnResource',
+                text: 'Resource Title',
+                handler: function(button, evt) {
+                    mainPanel.setActiveItem(1);
+                }
+            }, {
+                xtype: 'button',
+                text: 'Next',
+                handler: function(button, evt) {
+                    activateMarker(markers[markerIndex + 1]);                    
+                }
+            }]
+        });
+    } // createFooter
+    
     var module = {
         addMarker: addMarker,
         clearMarkers: clearMarkers,
@@ -286,10 +368,11 @@ MOUNDZ = (function() {
             });
             */
             
-            run(zoomLevel, new google.maps.LatLng(-33.86, 151.21));
-
             // initialise the screen
             initScreen();
+
+            // run the app
+            run(zoomLevel, new google.maps.LatLng(-33.86, 151.21));
         },
         
         run: run,
@@ -308,6 +391,12 @@ MOUNDZ = (function() {
             } // if
         }
     };
+    
+    Ext.setup({
+        onReady: function() {
+            module.init();
+        }
+    });
     
     return module;
 })();

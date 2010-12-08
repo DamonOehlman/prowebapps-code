@@ -5,6 +5,7 @@ MOUNDZ = (function() {
     
     // initialise variables
     var geominer = null,
+        jQT = null,
         map = null,
         mainScreen = true,
         markers = [],
@@ -27,6 +28,8 @@ MOUNDZ = (function() {
             .html(marker.getTitle())
             .removeClass('has-detail')
             .unbind('click');
+            
+        $('#marker-detail h1').html(marker.getTitle());
             
         // if content has been provided, then add the has-detail
         // class to adjust the display to be "link-like" and 
@@ -148,11 +151,14 @@ MOUNDZ = (function() {
     } // gotoPosition
     
     function initScreen() {
-        // watch for location hash changes
-        setInterval(watchHash, 10);
-
-        // next attach a click handler to all close buttons
-        $('button.close').click(showScreen);
+        jQT = new $.jQTouch({
+        });
+        
+        $('#map_canvas').height(
+            $('#mapper').height() - 
+            $('#mapper .toolbar').outerHeight() - 
+            $('#marker-nav').outerHeight()
+        );
     } // initScreen
     
     function run(zoomLevel, mockPosition) {
@@ -196,19 +202,7 @@ MOUNDZ = (function() {
     } // run
     
     function showScreen(screenId) {
-        mainScreen = typeof screenId !== 'string';
-        if (typeof screenId === 'string') {
-            $('#' + screenId).css('left', '0px');
-
-            // update the location hash to marker detail
-            window.location.hash = screenId;
-        }
-        else {
-            $('div.child-screen').css('left', '100%');
-            window.location.hash = '';
-        } // if..else
-        
-        scrollTo(0, 1);
+        jQT.goTo('#' + screenId, 'slide');
     } // showScreen
     
     function sortMarkers() {
@@ -286,10 +280,11 @@ MOUNDZ = (function() {
             });
             */
             
-            run(zoomLevel, new google.maps.LatLng(-33.86, 151.21));
-
             // initialise the screen
             initScreen();
+
+            // run the app
+            run(zoomLevel, new google.maps.LatLng(-33.86, 151.21));
         },
         
         run: run,

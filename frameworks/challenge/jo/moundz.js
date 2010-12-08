@@ -5,10 +5,18 @@ MOUNDZ = (function() {
     
     // initialise variables
     var geominer = null,
+        container = null,
+        mapCard = null,
+        detailCard = null,
+        resourceButton = null,
+        navbar = null,
+        stack = null,
+        toolbar = null,
         map = null,
         mainScreen = true,
         markers = [],
         markerContent = {},
+        markerIndex = 0,
         posWatchId = 0;
         
     /* private functions */
@@ -22,27 +30,14 @@ MOUNDZ = (function() {
         // update the specified marker's icon to the active image
         marker.setIcon('img/pin-active.png');
             
-        // update the navbar title using jQuery
-        $('#marker-nav .marker-title')
-            .html(marker.getTitle())
-            .removeClass('has-detail')
-            .unbind('click');
-            
-        // if content has been provided, then add the has-detail
-        // class to adjust the display to be "link-like" and 
-        // attach the click event handler
-        var content = markerContent[marker.getTitle()];
-        if (content) {
-            $('#marker-nav .marker-title')
-                .addClass('has-detail')
-                .click(function() {
-                    $('#marker-detail .content').html(content);
-                    showScreen('marker-detail');
-                });
-        } // if
+        // update the text of the resource button
+        resourceButton.setData(marker.getTitle());
         
-        // update the marker navigation controls
-        updateMarkerNav(getMarkerIndex(marker));
+        // update the contents of the detail card
+        detailCard.setData(markerContent[marker.getTitle()]);
+        
+        // get the updated active marker index
+        markerIndex = getMarkerIndex(marker);
     } // activateMarker
     
     function markResources(resourceType, deposits) {
@@ -148,11 +143,64 @@ MOUNDZ = (function() {
     } // gotoPosition
     
     function initScreen() {
-        // watch for location hash changes
-        setInterval(watchHash, 10);
+        var stackHeight;
+        
+        jo.load();
+        
+        // create a stack that we will use for paging
+        stack = new joStack();
 
-        // next attach a click handler to all close buttons
-        $('button.close').click(showScreen);
+        // create the navbar for the app
+        navbar = new joNavbar('Jo Moundz');
+        navbar.setStack(stack);
+        
+        // define the resource details button
+        resourceButton = new joButton("Resource");
+        
+        // attach the select event handler
+        resourceButton.selectEvent.subscribe(function() {
+            // when the button is pushed, then show the detail page
+            stack.push(detailCard);
+        });
+        
+        // create the toolbar
+        toolbar = new joToolbar([
+            new joFlexrow([
+                new joButton("Previous").selectEvent.subscribe(function() {
+                    activateMarker(markers[markerIndex - 1]);
+                }),
+                resourceButton,
+                new joButton("Next").selectEvent.subscribe(function() {
+                    activateMarker(markers[markerIndex + 1]);
+                })
+            ])
+        ]);
+        
+        // create the wrapper to the body
+        container = new joScreen([
+            navbar,
+            toolbar,
+            stack
+        ]);
+        
+        // now the the screen is created, calculate the available height
+        stackHeight = stack.container.getBoundingClientRect().height - 
+            toolbar.container.getBoundingClientRect().height - 
+            navbar.container.getBoundingClientRect().height;
+        
+        // create the map card
+        mapCard = new joCard([
+            joDOM.create('div', {
+                id: 'map_canvas',
+                height: stackHeight + 'px'
+            })
+        ]);
+        
+        // create the detail card
+        detailCard = new joCard();
+        
+        // add the map to the view
+        stack.push(mapCard);
     } // initScreen
     
     function run(zoomLevel, mockPosition) {
@@ -166,6 +214,7 @@ MOUNDZ = (function() {
         if (mockPosition) {
             gotoPosition(mockPosition, zoomLevel ? zoomLevel : 15);
             findResources(function() {
+                console.debug('found resources, have ' + markers.length + ' markers');
                 module.updateDisplay();
             });            
         }
@@ -257,13 +306,6 @@ MOUNDZ = (function() {
         } // if
     } // updateMarkerNav
     
-    function watchHash() {
-        // this function monitors the location hash for a reset to empty
-        if ((! mainScreen) && (window.location.hash === '')) {
-            showScreen();
-        } // if
-    } // watchHash
-
     var module = {
         addMarker: addMarker,
         clearMarkers: clearMarkers,
@@ -286,13 +328,23 @@ MOUNDZ = (function() {
             });
             */
             
-            run(zoomLevel, new google.maps.LatLng(-33.86, 151.21));
-
             // initialise the screen
             initScreen();
+
+            // run
+            run(zoomLevel, new google.maps.LatLng(-33.86, 151.21));
+            
+            setTimeout(module.refresh, 10000);
         },
         
         run: run,
+        
+        refresh: function() {
+            console.debug('refreshing markers');
+            for (var ii = markers.length; ii--; ) {
+                markers[ii].setMap(map);
+            } // for
+        },
         
         updateDisplay: function() {
             // get the first marker

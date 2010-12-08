@@ -1,0 +1,137 @@
+/* apply the standard css recommended in GMaps tutorial */
+html { 
+    height: 100% 
+}
+
+body { 
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    overflow: hidden;
+    font-family: Arial;
+}
+
+/* application window styles */
+
+#app {
+    height: 100%;
+    width: 100%;
+}
+
+/* splash screen styles */
+
+#splash {
+    height: 100%;
+    width: 80%;
+    background: -webkit-gradient(linear, left top, left bottom, from(#c4c8b7), to(#cddd87));
+    padding: 0 10%;
+}
+
+#splash > * {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+}
+
+#splash strong {
+    color: hsla(0, 10%, 30%, 0.6);
+    font-size: 2.0em;
+    text-shadow: hsla(0, 10%, 90%, 0.8) 0 1px 0px;
+    padding: 20px 0 0 0;
+}
+
+#splash p.hint {
+    -webkit-border-radius: 4px;
+    background: hsla(0, 10%, 30%, 0.5);
+    margin: 5px;
+    padding: 10px 15px;
+    color: white;
+    font-size: 0.80em;
+}
+
+#login {
+    position: fixed;
+    width: 80%;
+    bottom: 20px;
+}
+
+/* title styles */
+h1.simple {
+    font-size: 0.9em;
+    padding: 8px 4px 4px 8px;
+    background: #333333;
+    color: #AAAAAA;
+    border-bottom: 2px solid #AAAAAA;
+    margin: 0 0 4px 0;
+}
+
+h1.floating {
+    position: absolute; 
+    width: 100%; 
+    z-index: 100;
+}
+
+/* marker navigation bar */
+#marker-nav {
+    /* set general color and style */
+    background: rgba(33, 69, 123, 0.8);
+    color: white;
+    font-weight: bold;
+    text-shadow: 1px 1px 1px rgba(50, 50, 50, 0.85);
+    text-align: center;
+
+    /* initialize positioning and layout */
+    position: absolute;
+    top: 20px;
+    z-index: 90;
+    width: 90%;
+    margin: 0 2%;
+    padding: 18px 3% 10px;
+
+    /* add the 'mandatory' border radius */
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    -webkit-border-radius: 12px;
+}
+
+/* marker navigation elements styling */
+#marker-nav img.left {
+    float: left;
+    -webkit-transform: rotate(180deg);
+}
+
+#marker-nav img.right {
+    float: right;
+}
+
+#marker-nav img.disabled {
+    opacity: 0.25;
+}
+
+#marker-nav span.has-detail {
+    text-decoration: underline;
+}
+
+/* child views */
+
+div.child-screen {
+    background: rgba(255, 255, 255, 0.9);
+    width: 100%;
+    height: 100%;
+    left: 100%;
+    top: 0px;
+    position: absolute;
+    z-index: 91;
+}
+
+div.child-screen .content {
+    margin: 50px 10px 0;
+}
+
+div.child-screen button.close {
+    height: 30px;
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    display: block;
+}
