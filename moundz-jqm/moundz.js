@@ -8,8 +8,10 @@ MOUNDZ = (function() {
         map = null,
         mainScreen = true,
         markers = [],
-        markerContent = {},
-        posWatchId = 0;
+        markerData = {},
+        currentResource = '',
+        posWatchId = 0,
+        supportsTouch = 'ontouchstart' in window;
         
     /* private functions */
         
@@ -24,33 +26,39 @@ MOUNDZ = (function() {
             
         // update the navbar title using jQuery
         $('#marker-nav a[href="#marker-detail"]')
-            .unbind('tap')
             .find('.ui-btn-text')
                 .html(marker.getTitle());
             
-        // if content has been provided, then add the has-detail
-        // class to adjust the display to be "link-like" and 
-        // attach the click event handler
-        var content = markerContent[marker.getTitle()];
-        if (content) {
-            $('#marker-nav a[href="#marker-detail"]')
-                .tap(function() {
-                    $('#marker-detail div[data-role="content"]').html(content);
-                });
-        } // if
+        // update the active marker title
+        currentResource = marker.getTitle();
         
         // update the marker navigation controls
         updateMarkerNav(getMarkerIndex(marker));
     } // activateMarker
+    
+    function gatherResource() {
+        var currentData = markerData[currentResource];
+        if (currentData && geominer) {
+            var qty = $('#slider').val();
+            geominer.gather(currentData.id, qty, function(totalGathered) {
+                // update the quantity available
+                currentData.avail = Math.max(currentData.total - totalGathered, 0);
+                
+                // if the resource is still the same, then update the display
+                if (currentData.name === currentResource) {
+                    updateResourceDetails();
+                } // if
+            });
+        } // if
+    } // gatherResource
     
     function markResources(resourceType, deposits) {
         for (var ii = 0; ii < deposits.length; ii++) {
             // add the marker for the resource deposit
             addMarker(
                 new google.maps.LatLng(deposits[ii].lat, deposits[ii].lng), 
-                deposits[ii].name, 
-                '<div class="resinfo">' + deposits[ii].total + 
-                ' resources at this location</div>');
+                deposits[ii].name,
+                deposits[ii]);
         } // for
     } // markResources
     
@@ -67,9 +75,26 @@ MOUNDZ = (function() {
         } // for
     } // markResources
     
+    function updateResourceDetails() {
+        var currentData = markerData[currentResource];
+        if (currentData) {
+            var percAvail = 0;
+            
+            // determine the resource available percentage
+            if (currentData.total !== 0) {
+                percAvail = Math.round((currentData.avail / currentData.total) * 100);
+            } // if
+            
+            $('#marker-detail h2').html(currentData.name);
+            $('#resavail')
+                .html(currentData.avail + ' / ' + currentData.total)
+                .css('-webkit-background-size', percAvail + '% 100%');
+        } // if
+    } // updateResourceDetails
+    
     /* exported functions */
         
-    function addMarker(position, title, content) {
+    function addMarker(position, title, data) {
         // create a new marker to and display it on the map
         var marker = new google.maps.Marker({
             position: position, 
@@ -78,8 +103,10 @@ MOUNDZ = (function() {
             icon: 'img/pin-inactive.png'
         });
         
+        markerPosition = position;
+        
         // save the marker content
-        markerContent[title] = content;
+        markerData[title] = data;
         
         // add the marker to the array of markers
         markers.push(marker);
@@ -152,6 +179,11 @@ MOUNDZ = (function() {
             $('#main div[data-role="header"]').outerHeight() -
             $('#main div[data-role="footer"]').outerHeight() - 30
         );
+        
+        // bind to the marker detail tap event
+        $('a[href="#marker-detail"]').live(supportsTouch ? 'tap' : 'click', updateResourceDetails);
+        
+        $('#btnGather').live(supportsTouch ? 'tap' : 'click', gatherResource);
     } // initScreen
     
     function run(zoomLevel, mockPosition) {
@@ -276,20 +308,16 @@ MOUNDZ = (function() {
                 login: '#login'
             });
 
-            /*
             $(geominer).bind('authenticated', function(evt) {
                 $('#splash').hide();
-                $('#app').show();
+                $('.noauth').removeClass('noauth');
                 
-                run(zoomLevel);
+                // run the app
+                run(zoomLevel, new google.maps.LatLng(-33.86, 151.21));
             });
-            */
             
             // initialise the screen
             initScreen();
-
-            // run the app
-            run(zoomLevel, new google.maps.LatLng(-33.86, 151.21));
         },
         
         run: run,

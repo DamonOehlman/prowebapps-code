@@ -4,40 +4,55 @@
 <title>jQueryMobile Moundz</title>
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 <link rel="stylesheet" media="screen" href="jquery.mobile-1.0a2.min.css" />
-<!-- <link rel="stylesheet" media="screen" href="moundz.css" /> -->
+<link rel="stylesheet" media="screen" href="moundz.css" />
 <script type="text/javascript" src="jquery-1.4.4.min.js"></script>
 <script type="text/javascript" src="jquery.mobile-1.0a2.min.js"></script>
 <script type="text/javascript" src="moundz.js"></script>
-<!-- <script type="text/javascript" src="phonegap.js"></script> -->
+<script type="text/javascript" src="phonegap.js"></script>
 <script type="text/javascript" src="http://api.geominer.net/jsapi/v1/geominer.js">
 </script>
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true">
 </script>
 <script type="text/javascript">
 function initialize() {
-	MOUNDZ.init();
+    MOUNDZ.init();
 } // initialize
 </script>
 </head>
 <body onload="initialize()">
-<div id="main" data-role="page">
-	<div data-role="header">
-		<h1>Moundz</h1>
-	</div>
-	<div id="map_canvas" data-role="content"></div>
-	<div data-role="footer" class="ui-bar" data-id="moundz_footer">
-		<div id="marker-nav" data-role="controlgroup" data-type="horizontal">
-			<a href="#" data-role="button" data-icon="arrow-l" class="left">Previous</a>
-			<a href="#marker-detail" data-role="button">** Place Name **</a>
-			<a href="#" data-role="button" data-icon="arrow-r" class="right">Next</a>
-		</div>
-	</div>
+<div id="splash">
+    <strong>Welcome to</strong>
+    <img src="img/moundz_logo.png" />
+    <p class="hint">
+        Press the 'Sign in with Twitter' button below to get started playing.
+    </p>
+    <span id="login"></login>
+</div>  
+<div id="main" class="noauth" data-role="page">
+    <div data-role="header">
+        <h1>Moundz</h1>
+    </div>
+    <div id="map_canvas" data-role="content"></div>
+    <div data-role="footer" class="ui-bar" data-id="moundz_footer">
+        <div id="marker-nav" data-role="controlgroup" data-type="horizontal">
+            <a href="#" data-role="button" data-icon="arrow-l" class="left">Previous</a>
+            <a href="#marker-detail" data-role="button">Info</a>
+            <a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" class="right">Next</a>
+        </div>
+    </div>
 </div>
-<div id="marker-detail" data-role="page">
-	<div data-role="header">
-		<h1>Location Detail</h1>
-	</div>
+<div id="marker-detail" class="noauth" data-role="page">
+    <div data-role="header">
+        <h1>Resource Details</h1>
+    </div>
     <div data-role='content'>
+        <h2>Test Header</h2>
+        <div id="resavail"></div>
+        <div data-role="fieldcontain">
+            <label for="slider">Amount to Gather:</label>
+            <input type="range" name="slider" id="slider" value="1" min="1" max="5"  />
+        </div>
+        <a id="btnGather" href="#" data-role="button">Gather</a>
     </div>
 </div>
 </body>

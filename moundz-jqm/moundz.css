@@ -13,9 +13,8 @@ body {
 
 /* application window styles */
 
-#app {
-    height: 100%;
-    width: 100%;
+div.noauth {
+    visibility: hidden;
 }
 
 /* splash screen styles */
@@ -71,46 +70,6 @@ h1.floating {
     z-index: 100;
 }
 
-/* marker navigation bar */
-#marker-nav {
-    /* set general color and style */
-    background: rgba(33, 69, 123, 0.8);
-    color: white;
-    font-weight: bold;
-    text-shadow: 1px 1px 1px rgba(50, 50, 50, 0.85);
-    text-align: center;
-
-    /* initialize positioning and layout */
-    position: absolute;
-    top: 20px;
-    z-index: 90;
-    width: 90%;
-    margin: 0 2%;
-    padding: 18px 3% 10px;
-
-    /* add the 'mandatory' border radius */
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    -webkit-border-radius: 12px;
-}
-
-/* marker navigation elements styling */
-#marker-nav img.left {
-    float: left;
-    -webkit-transform: rotate(180deg);
-}
-
-#marker-nav img.right {
-    float: right;
-}
-
-#marker-nav img.disabled {
-    opacity: 0.25;
-}
-
-#marker-nav span.has-detail {
-    text-decoration: underline;
-}
-
 /* child views */
 
 div.child-screen {
@@ -134,4 +93,41 @@ div.child-screen button.close {
     left: 10px;
     right: 10px;
     display: block;
+}
+
+/* navigation control visual treatment */
+
+#marker-nav a {
+    max-width: 32%;
+}
+
+#marker-nav a.left, #marker-nav a.right {
+     width: 90px;
+}
+
+#marker-nav {
+    display: -webkit-box;
+    -webkit-box-pack: center;
+}
+
+/* resource details screen styles */
+
+#marker-detail h2 {
+    text-align: center;
+    margin: 0 0 10px;
+    color: #777;
+}
+
+#resavail {
+    background: #333 -webkit-gradient(linear, left top, right top, from(#099), to(#0A0)) no-repeat;
+    border: 2px #333 solid;
+    -webkit-border-radius: 8px;
+    -webkit-box-shadow: #555 0 1px 2px;
+    height: 20px;
+    font: bold 0.9em Arial;
+    letter-spacing: 3px;
+    text-align: center;
+    color: white;
+    padding: 5px 0 2px;
+    text-shadow: none;
 }

@@ -1,0 +1,31 @@
+<html>
+<script src="../../js/jquery-1.4.2.min.js"></script>
+<script>
+function showData(data) {
+    var tweetItems = '';
+
+    for (var ii = 0; ii < document.scripts.length; ii++) {
+        var script = document.scripts[ii];
+        
+        if (script.src) {
+            tweetItems += '<li>' + script.src + '</li>';
+        } // if
+    } // for
+    
+    $('#tweets').html(tweetItems);
+} // showData
+
+$(document).ready(function() {
+    // make the request to the geonames server
+    $.ajax({
+        url: 'http://api.twitter.com/1/statuses/public_timeline.json',
+        dataType: 'jsonp',
+        success: showData
+    });
+});
+</script>
+<body>
+    <ul id="tweets">
+    </ul>
+</body>
+</html>
