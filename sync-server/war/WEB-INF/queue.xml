@@ -1,0 +1,15 @@
+<queue-entries>
+  <queue>
+    <name>default</name>
+    <rate>10/s</rate>
+  </queue>
+  <queue>
+    <name>slim3-gtx-queue</name>
+    <rate>10/s</rate>
+    <bucket-size>10</bucket-size>
+  </queue>
+  <queue>
+    <name>jetasks</name>
+    <rate>10/s</rate>
+  </queue>
+</queue-entries>

@@ -1,0 +1,27 @@
+<html>
+<head>
+	<title>Simple Mobile Web Page</title>
+	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+</head>
+<body>
+	<h1>Create Task</h1>
+	<form>
+		<div>
+		<label for="taskname">Task Name:</label><br />
+		<input type="text" name="task[name]" id="taskname" />
+		</div>
+		
+		<div>
+		<label for="taskdesc">Task Description</label><br />
+		<textarea name="task[description]" rows="5"></textarea>
+		</div>
+		
+		<div>
+		<label for="taskdue">Task Due:</label><br />
+		<input type="text" name="task[due]" id="taskdue" />
+		</div>
+		
+		<input type="submit" name="Save" />
+	</form>
+</body>
+</html>

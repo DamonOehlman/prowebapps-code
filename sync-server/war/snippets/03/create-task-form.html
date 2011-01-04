@@ -1,0 +1,25 @@
+<html>
+<head>
+    <title>Simple Mobile Web Page</title>
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+    <link rel="stylesheet" media="screen" href="todolist.css" />
+    <script type="text/javascript" src="../../js/jquery-1.4.2.min.js"></script>
+	<script type="text/javascript" src="../../js/jquery.validate.js"></script>
+    <script type="text/javascript" src="../../js/prowebapps.js"></script>
+	<script type="text/javascript" src="todolist.js"></script>
+</head>
+<body>
+    <h1 class="fancy">Create Task</h1>
+	<div id="errors"></div>
+    <form id="taskentry">
+    <ul>
+        <li><input type="text" class="required" name="task[name]" id="taskname" placeholder="Task Name" value="Mow the Lawn "/></li>
+        <li>
+            <textarea name="task[description]" id="taskdesc" placeholder="Description" rows="5"></textarea>
+        </li>
+        <li><input type="text" class="required date" name="task[due]" id="taskdue" placeholder="Task Due" value="2010-08-23 11:23" /></li>
+        <li class="naked"><input type="submit" name="Save" /></li>
+    </ul>
+    </form>
+</body>
+</html>

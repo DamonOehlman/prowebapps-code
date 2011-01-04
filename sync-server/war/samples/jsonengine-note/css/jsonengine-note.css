@@ -1,0 +1,36 @@
+body{ 
+	font: 100% "Trebuchet MS", sans-serif; 
+	margin: 50px;
+}
+
+#main {
+	width: 100%;
+	height: 100%;
+	clear: both;
+}
+
+.listarea {
+	width: 20%;
+	float: left;
+	margin-right: 2em;
+}
+
+.editarea {
+	width: 70%;
+	float: left;
+	padding:0px;
+}
+
+
+#note-list {
+	margin-top:0px;
+	padding: 1em 2em;
+	border: 1px solid black;
+}
+
+#detail {
+	font-size: 120%;
+	width: 80%;
+	height: 30em;
+	padding: 0.4em;
+}

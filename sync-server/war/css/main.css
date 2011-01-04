@@ -1,0 +1,22 @@
+body {
+    margin: 0px;
+}
+
+div {
+    padding: 0px 8px;
+}
+
+h1 {
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0.0, #555555), color-stop(0.3, #333333), color-stop(1.0, #000000));
+    -webkit-box-shadow:0 0 4px black;
+    color: white;
+    margin: 0px;
+    padding: 8px;
+    font-size: 1.3em;
+}
+
+ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}

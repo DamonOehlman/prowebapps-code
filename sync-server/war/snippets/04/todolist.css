@@ -1,0 +1,189 @@
+body {
+    margin: 0px;
+    min-height: 480px;
+    font-family: Arial;
+}
+
+form ul {
+    margin: 0px;
+    padding: 6px;
+    list-style-type: none;
+}
+
+form ul li {
+    margin: 0 0 4px 0;
+    -webkit-border-radius: 4px;
+    border: 1px solid #666666;
+    padding: 4px;
+}
+
+form ul li.naked {
+    -webkit-border-radius: 0px;
+    border: 0;
+    padding: 0;
+}
+
+input, textarea {
+    -webkit-appearance: none;
+    border: 0;
+    width: 99%;
+}
+
+input.invalid, textarea.invalid {
+    background: url(exclamation.png) no-repeat 2px 2px;
+    padding-left: 22px;
+}
+
+#errors {
+    margin: 8px 6px 2px 6px;
+    padding: 6px 14px;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0.0, #cc0000), color-stop(0.7, #770022));
+    -webkit-border-radius: 4px;
+    color: white;
+    display: none;
+}
+
+ul.errors-inline li {
+    border: 0px;
+    color: red;
+    padding: 0px;
+}
+
+input[type=submit] {
+    border: 1px solid white;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0.0, #F8F8F8), color-stop(1.0, #AAAAAA));
+    -webkit-border-radius: 6px;
+    -webkit-box-shadow: 0 0 4px #333333;
+    width: 100%;
+    padding: 6px;
+}
+
+.right {
+    float: right;
+}
+
+/* task styling (chapter 4) */
+
+div.task {
+    margin: 8px 4px;
+}
+
+div.task h3 {
+    border: 1px solid #ff6600;
+    background: #ff7f2a;
+    color: white;
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    margin: 0;
+    padding: 8px;
+    font-size: 0.8em;
+}
+
+div.task p {
+    margin: 0;
+    background: #e6e6e6;
+    border-left: 1px solid #b3b3b3;
+    border-right: 1px solid #b3b3b3;
+    padding: 8px;
+}
+
+p.task-due label {
+    font-weight: bold;
+    width: 70px;
+    float: left;
+}
+
+p.notasks {
+    text-align: center;
+    color: green;
+    font-weight: bold;
+}
+
+.overdue {
+    color: red;
+    font-weight: bold;
+}
+
+ul.task-actions {
+    background: #b3b3b3;
+    border: 1px solid #b3b3b3;
+    color: white;
+    padding: 8px;
+    -webkit-border-bottom-left-radius: 5px;
+    -webkit-border-bottom-right-radius: 5px;
+    margin: 0;
+    list-style-type: none;
+}
+
+ul.task-actions li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.8em;
+}
+
+ul.task-actions li.right {
+    padding: 4px 0 0 0;
+}
+
+/* all tasks display (chapter 04) */
+
+ul#tasklist {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+ul#tasklist > li {
+    padding: 0;
+    margin: 0;
+    clear: both;
+    background: #ececec;
+}
+
+ul#tasklist > li:nth-child(2n) {
+    background: #cccccc;
+}
+
+ul#tasklist .task-header {
+    padding: 19px 0px 17px 10px;
+}
+
+ul#tasklist .task-details {
+    clear: both;
+    background: #333333;
+    color: white;
+    padding: 8px;
+    display: none;
+}
+
+ul#tasklist .task-details a {
+    color: white;
+    text-decoration: none;
+    font: bold 0.8em Arial;
+    margin: 6px 0 0 0;
+}
+
+/* calendar list formatter (chapter 04) */
+
+ul.calendar {
+    -webkit-border-radius: 4px;
+    -webkit-box-shadow: 0 0 2px #333333;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0.0, #F8F8F8), color-stop(1.0, #AAAAAA));
+    margin: 6px 6px 6px 0;
+    padding: 0 6px;
+    list-style-type: none;
+}
+
+ul.calendar li {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    font-weight: bold;
+    font-size: 0.7em;
+}
+
+ul.calendar li.day {
+    font-size: 0.85em;
+    padding: 1px 0 0 0;
+}

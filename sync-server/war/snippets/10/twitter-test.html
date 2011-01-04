@@ -1,0 +1,32 @@
+<html>
+<script src="../../js/jquery-1.4.2.min.js"></script>
+<script>
+function showData(data) {
+    var tweetItems = '';
+
+    if (! data) {
+        tweetItems = '<li><strong>Count not retrieve tweets.</strong></li>';
+    }
+    else {
+        for (var ii = 0; ii < data.length; ii++) {
+            tweetItems += '<li>' + data[ii].text + '</li>';
+        } // for
+    }
+    
+    $('#tweets').html(tweetItems);
+} // showCountryInfo
+
+$(document).ready(function() {
+    // make the request to the geonames server
+    $.ajax({
+        url: 'http://api.twitter.com/1/statuses/public_timeline.json',
+        dataType: 'jsonp',
+        success: showData
+    });
+});
+</script>
+<body>
+    <ul id="tweets">
+    </ul>
+</body>
+</html>

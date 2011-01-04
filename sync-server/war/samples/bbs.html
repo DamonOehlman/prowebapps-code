@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>BBS sample by jsonengine</title>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+$(function() {
+  query(null);
+});
+
+// post a message
+function post(msg) {
+
+  // disable the buttons and clear the text field
+  disableButton(true);
+  $("#msgTxt").val("");
+  
+  // post a message
+  $.post("/_je/messages", { messageBody_: msg }, function (result){	
+    query(null);
+  }, "text");
+}
+
+// get all posts and list them
+function query(keyword) {
+  
+  // build query params
+  disableButton(true);
+  if (keyword) params = {cond : "messageBody_.eq." + keyword};
+  else params = { sort: "_createdAt.desc", limit: 100};
+  
+  // query for the messages
+  $.get("/_je/messages", params, function (result) {
+    $("#messages").empty();
+    for (i = 0; i < result.length; i++) {
+      var msg = $("<div/>").text("(" + getUserName(result[i]) + ") " + result[i].messageBody_);
+      $("#messages").append(msg);
+    }
+    disableButton(false);
+  });
+}
+
+// extract an user name from the creator's email address
+function getUserName(doc) {
+  return doc._createdBy == null ? "nobody" : doc._createdBy.split("@")[0]; 
+}
+
+// disable sendBtn while waiting for reply from server
+function disableButton(isDisabled) {
+  if (isDisabled) {
+    $("#sendBtn").attr("disabled", true);
+    $("#searchBtn").attr("disabled", true);
+  } else {
+    $("#sendBtn").removeAttr("disabled");
+    $("#searchBtn").removeAttr("disabled");
+  }
+}
+
+</script>
+</head>
+
+<body>
+<h1>BBS sample by jsonengine</h1>
+<input id="msgTxt" type="text" value=""  size="50">
+<input id="sendBtn" type="button" value="Post" onclick="post($('#msgTxt').val());" ><br>
+<input id="searchTxt" type="text" value=""  size="50">
+<input id="searchBtn" type="button" value="Search" onclick="query($('#searchTxt').val());" ><br>
+<span id="messages"></span><br>
+<br>
+<hr>
+<center>
+Please see the HTML source of this page to learn how to write jQuery client for jsonengine.<br>
+Powered by <a href="http://code.google.com/p/jsonengine/">jsonengine</a><br>
+</center>
+</body>
+
+</html>

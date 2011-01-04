@@ -137,24 +137,42 @@ TODOLIST = (function() {
                 db.changeVersion("1.0", "1.1", function(transaction) {
                     transaction.executeSql("ALTER TABLE task ADD completed DATETIME;");
                 });
+            } // try..catch
+            
+            function synchronizeOnline(callback) {
+                db.transaction(function(transaction) {
+                    transaction.executeSql(
+                        "SELECT rowid as id, * FROM task ",
+                        [],
+                        function (transaction, results) {
+                            var tasksSynchronized = 0;
+                            
+                            // initialise an array to hold the tasks
+                            // read each of the rows from the db, and create tasks
+                            for (var ii = 0; ii < results.rows.length; ii++) {
+                                var task = JSON.stringify(new module.Task(results.rows.item(ii)));
+                                
+                                $.post("/_je/tasks", { _doc: task, _docId: task.id }, function() {
+                                    // once the post has completed, increment the counter 
+                                    tasksSynchronized += 1;
+                                    
+                                    // and check to see if we have finished the sync operation
+                                    if (callback && (tasksSynchronized === results.rows.length)) {
+                                        callback(tasksSynchronized, true);
+                                    } // if
+                                });
+                            } // for
+                            
+                            // fire the callback and provide information on the number
+                            // of tasks that were updated
+                            if (callback) {
+                                callback(results.rows.length, false);
+                            } // if
+                        }
+                    );
+                });
             }
-            function synchonizeOnline() {
-			                db.transaction(function(transaction) {
-			                    transaction.executeSql(
-			                        "SELECT rowid as id, * FROM task ",
-			                        [],
-			                        function (transaction, results) {
-			                        // initialise an array to hold the tasks
-			                       // read each of the rows from the db, and create tasks
-			                            for (var ii = 0; ii < results.rows.length; ii++) {
-					var task = JSON.stringify(new module.Task(results.rows.item(ii)));
-			                      	$.post("/_je/tasks", {_doc:task,_docId:ii});
-			                            }       
-			                        }
-			                    );
-			                });
-			            }
-			
+
             function getTasks(callback, extraClauses) {
                 db.transaction(function(transaction) {
                     transaction.executeSql(
@@ -194,11 +212,7 @@ TODOLIST = (function() {
                     });
                 },
 
-
-				synchronizeTasks: function(callback) {
-				       synchonizeOnline ();
-				                },
-
+                synchronizeTasks: synchronizeOnline,
                 
                 saveTask: function(task, callback) {
                     db.transaction(function(transaction) {
@@ -312,10 +326,14 @@ TODOLIST = (function() {
                         // save the task back to storage
                         TODOLIST.Storage.saveTask(task, module.activateMain);
                     });
-				  jQuery("#main .synchronize").unbind().click(function() {
-					     TODOLIST.Storage.synchronizeTasks();
-					      });
-
+                    
+                    jQuery("#main .synchronize").unbind().click(function() {
+                        TODOLIST.Storage.synchronizeTasks(function(updateCount) {
+                            $("#info")
+                                .html("Completed : " + updateCount + " task(s) have been synchronised !")
+                                .show();
+                        });
+                    });
                 }
                 else {
                     jQuery("#main .notasks").remove();
