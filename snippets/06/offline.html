@@ -1,0 +1,35 @@
+<html>
+<head>
+    <title>Ajax Localhost Test</title>
+    <script language="javascript" type="text/javascript" src="../../js/jquery-1.4.2.min.js"></script>
+    <script language="javascript" type="text/javascript" src="jquery-timers-1.2.js"></script>
+    <script language="javascript" type="text/javascript">
+        $(document).ready(function(){
+            $('#messages').append("Starting<br />");
+
+            $('#messages').oneTime(3000, function(){
+                $('#messages').append('Could not find service');
+            });
+
+            $.ajax({ url: 'http://twitter.com/statuses/user_timeline/sebi2706.json?callback=?',
+            dataType: 'jsonp',
+            timeout: 3000,
+            complete: function() {
+                $('#messages').append("Complete<br />");
+                $('#messages').stopTime();
+            },
+            success: function(version) {
+                $('#messages').append("Success<br />");
+            },
+            error: function(request, status, error) {
+                $('#messages').append("Error<br />");
+            }
+        });
+        });
+    </script>
+</head>
+<body>
+    <h1>Ajax Localhost Test</h1>
+    <div id="messages"></div>
+</body>
+</html>
