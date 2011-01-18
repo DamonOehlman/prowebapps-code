@@ -5,7 +5,7 @@ function showData(data) {
     var tweetItems = '';
 
     if (! data) {
-        tweetItems = '<li><strong>Count not retrieve tweets.</strong></li>';
+        tweetItems = '<li><strong>Could not retrieve tweets.</strong></li>';
     }
     else {
         for (var ii = 0; ii < data.length; ii++) {
@@ -20,7 +20,7 @@ $(document).ready(function() {
     // make the request to the geonames server
     $.ajax({
         url: 'http://api.twitter.com/1/statuses/public_timeline.json',
-        dataType: 'jsonp',
+        dataType: 'json',
         success: showData
     });
 });

@@ -150,9 +150,10 @@ TODOLIST = (function() {
                             // initialise an array to hold the tasks
                             // read each of the rows from the db, and create tasks
                             for (var ii = 0; ii < results.rows.length; ii++) {
-                                	var task = new module.Task(results.rows.item(ii));
-									var taskJson = JSON.stringify(task);
-							        $.post("/_je/tasks", {_doc:taskJson,_docId:task.id}, function() {
+                                var task = new module.Task(results.rows.item(ii)),
+                                    taskJson = JSON.stringify(task);
+                                
+                                $.post("/_je/tasks", {_doc:taskJson,_docId:task.id}, function() {
                                     // once the post has completed, increment the counter 
                                     tasksSynchronized += 1;
                                     

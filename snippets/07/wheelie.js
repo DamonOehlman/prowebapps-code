@@ -99,8 +99,8 @@
 
         document.body.addEventListener("touchstart", function(evt) {
             startCar(
-                evt.touches[0].pageX / window.devicePixelRatio,
-                evt.touches[0].pageY / window.devicePixelRatio);
+                evt.touches[0].pageX,
+                evt.touches[0].pageY);
             
             // prevent screen scrolling
             evt.preventDefault();

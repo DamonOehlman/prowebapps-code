@@ -72,7 +72,7 @@ MOUNDZ = (function() {
     /* exported functions */
         
     function addMarker(position, title, content) {
-        // create a new marker to and display it on the map
+        // create a new marker and display it on the map
         var marker = new google.maps.Marker({
             position: position, 
             map: map,

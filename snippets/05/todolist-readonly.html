@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Tasks page</title>
+<link rel="stylesheet" media="screen" href="todolist-readonly.css" />
+<script type="text/javascript" src="../../js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript">
+// get all the posts and show them
+$(function() {
+    $.get("/_je/tasks", { sort: "_createdAt.desc" }, function (result) {
+        var rowsHtml = '';
+        
+        for (var ii = 0; ii < result.length; ii++) {
+            rowsHtml += '<tr>' + 
+                '<td>' + result[ii].name + '</td>' + 
+                '<td>' + result[ii].description + '</td>' + 
+                '<td>' + result[ii].due + '</td>' + 
+            '</tr>';
+        } // for
+        
+        $('#taskTable tbody').html(rowsHtml);
+    });
+});
+</script>
+</head>
+<body>
+<h1>Current tasks stored in JSONEngine</h1>
+<table id="taskTable">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Due</th>
+        </tr>
+    </thead>
+    <tbody />
+</table>
+</body>
+</html>
