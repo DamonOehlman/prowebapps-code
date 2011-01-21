@@ -1,0 +1,22 @@
+This is the source code that accompanies the Apress book, 
+Pro Android Web Apps (http://apress.com/book/view/1430232765), written by
+Damon Oehlman (http://twitter.com/DamonOehlman) and Sébastien Blanc (http://twitter.com/sebi2706).
+
+As this is a book on mobile web applications, the source code is 
+primarily comprised of HTML, CSS and Javascript.  
+
+Each of the chapters code samples are stored in the snippets directory, 
+except in the cases where the sample code for that directory formed part of 
+a larger exercise.  In these cases that chapter points to the location of the
+source so it can be referenced easily.
+
+While every attempt has been made to make sure this code is bug free, if anything
+has slipped through the cracks please let us know at the Apress Site:
+
+http://apress.com/book/errata/1521
+
+And possibly also submit an issue in the Github Issue Tracker:
+
+http://github.com/sidelab/prowebapps-code/issues
+
+Thanks for your interest in the book :)
