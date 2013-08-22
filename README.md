@@ -6,7 +6,7 @@ The original source code for the book has been preserved at the [at-print](https
 
 ## Suggestions and Feedback
 
-While the [at-print](https://github.com/DamonOehlman/prowebapps-code/tree/at-print) branch represents what is frozen in time, this branch can evolve in response to your [suggestions](https://github.com/DamonOehlman/prowebapps-code/issues).  Obviously we can't please everyone, but we try and get it right for most.
+While the [at-print](https://github.com/DamonOehlman/prowebapps-code/tree/at-print) branch represents what was printed with the book and will remain static, this branch can evolve in response to your [suggestions](https://github.com/DamonOehlman/prowebapps-code/issues).  Obviously we can't please everyone, but we try and get it right for most.
 
 ## Motivation
 
