@@ -2,7 +2,7 @@
 
 This is an in-progress reorgnanisation of the [Pro Android Web Apps](http://apress.com/book/view/1430232765) book source code so that it can move towards being able to standalone and evolve, despite the words on the page being frozen in time.
 
-__NOTE:__ The original source code for the book has been preserved at the **[at-print](https://github.com/DamonOehlman/prowebapps-code/tree/at-print)** branch and can be referenced there.
+__NOTE:__ The **original source code for the book has been preserved in the [at-print](https://github.com/DamonOehlman/prowebapps-code/tree/at-print) branch** and can be referenced there.
 
 ## Suggestions and Feedback
 
