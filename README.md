@@ -4,6 +4,10 @@ This is an in-progress reorgnanisation of the [Pro Android Web Apps](http://apre
 
 __NOTE:__ The **original source code for the book has been preserved in the [at-print](https://github.com/DamonOehlman/prowebapps-code/tree/at-print) branch** and can be referenced there.
 
+## Getting Started
+
+Working through this repository of examples assumes that we have a common base set of tools.  Each of the tools required is available on all platforms and high level installation instructions are available in the [Setup Guide](SETUP.md).
+
 ## Suggestions and Feedback
 
 While the [at-print](https://github.com/DamonOehlman/prowebapps-code/tree/at-print) branch represents what was printed with the book and will remain static, this branch can evolve in response to your [suggestions](https://github.com/DamonOehlman/prowebapps-code/issues).  Obviously we can't please everyone, but we try and get it right for most.

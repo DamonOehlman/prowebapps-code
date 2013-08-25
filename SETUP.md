@@ -23,6 +23,14 @@ export PATH=$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools
 
 This means that from a command-prompt I can run the `android` command and the Android SDK management interface is started.  You should also be able to run the `adb` command (which we will use through the code samples) to assist with debugging our application.
 
+### Installing Android Packages
+
+If you have started with a fairly bare bones installation of the Android SDK, you may need to bring in some additional tools.  In particular we will be needing the **Android SDK Platform Tools** for some command-line helpers they provide.  If these are not already installed on your system, then install them by selecting the appropriate option in the SDK manager.
+
+A screenshot of the SDK manager is shown below for reference:
+
+![Android SDK Manager](/screenshots/android-sdk-manager.png)
+
 ## NodeJS
 
 At the time the book was published I was starting to dabble a bit with Node, but now three years later I'm sold on it.  It's a great platform in it's own right and great for building cross-platform tooling in general.
