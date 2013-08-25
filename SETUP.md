@@ -25,11 +25,19 @@ This means that from a command-prompt I can run the `android` command and the An
 
 ### Installing Android Packages
 
-If you have started with a fairly bare bones installation of the Android SDK, you may need to bring in some additional tools.  In particular we will be needing the **Android SDK Platform Tools** for some command-line helpers they provide.  If these are not already installed on your system, then install them by selecting the appropriate option in the SDK manager.
+If you have started with a fairly bare bones installation of the Android SDK, you may need to bring in some additional tools.  In particular we will be needing the **Android SDK Platform Tools** for some command-line helpers they provide.
 
-A screenshot of the SDK manager is shown below for reference:
+If these are not already installed on your system, then install them by selecting the appropriate option in the SDK manager. A screenshot of the SDK manager is shown below for reference:
 
 ![Android SDK Manager](/screenshots/android-sdk-manager.png)
+
+Once the platform tools are installed, validate that your path information is correct and the platform tools have installed correctly by opening a command prompt and running the following command:
+
+```
+adb version
+```
+
+If all is well you should see something like `Android Debug Bridge version 1.0.x` displayed to the console.  If not, then please review these instructions.
 
 ## NodeJS
 
